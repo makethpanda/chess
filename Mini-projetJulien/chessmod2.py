@@ -78,7 +78,7 @@ class Pawn(Piece):
             self.advancement = 1
     def getmoverange(self):
         moverange = []
-        if isempty(board,self.y+self.advancement,self.x):
+        if isempty(board,self.y+self.advancement,self.x):#avancer de 1
             moverange.append((self.y+self.advancement,self.x))
         if self.y == self.basepos():
             if isempty(board,self.y+2*self.advancement,self.x) and isempty(board,self.y+self.advancement,self.x):
@@ -91,7 +91,15 @@ class Pawn(Piece):
             if not isempty(board,self.y+self.advancement,self.x-1):
                 if self.color != checkboard(board,self.y+self.advancement,self.x-1):
                     moverange.append((self.y+self.advancement,self.x-1))
-        return moverange
+    def geteatrange(self):
+        eatrange = []
+        if self.x<7:
+            if self.color != checkboard(board,self.y+self.advancement,self.x+1):
+                eatrange.append((self.y+self.advancement,self.x+1))
+        if 0<self.x:
+            if self.color != checkboard(board,self.y+self.advancement,self.x-1):
+                eatrange.append((self.y+self.advancement,self.x-1))
+        return eatrange
 class Knight(Piece):
     def __init__(self, color, piece,y,x):
         super().__init__(color, piece,y,x) 
@@ -131,7 +139,7 @@ class Bishop(Piece):
         moverange = []
         x = self.x
         y = self.y
-        #x+ y+
+        #x+ y+ #WORKS I THINK
         while x+1<8 and y+1<8:
             x = x+1
             y =y+1
@@ -141,10 +149,10 @@ class Bishop(Piece):
             elif board[y][x][1]==self.color:
                 break
             else:
-                moverange.append((y,x))         
-            x+=1
-            y+=1
-        #x- y+
+                moverange.append((y,x))       
+        x = self.x
+        y = self.y
+        #x- y+ 
         while x-1>-1 and y+1<8:
             x = x-1
             y =y+1
@@ -154,26 +162,26 @@ class Bishop(Piece):
             elif board[y][x][1]==self.color:
                 break
             else:
-                moverange.append((y,x))         
-            x+=-1
-            y+=1
+                moverange.append((y,x))      
+        x = self.x
+        y = self.y 
         #x+ y-
-        while x+1<8 and y-1<8:
+        while x+1<8 and y-1>-1:
             x = x+1
-            y =y+1
+            y =y-1
             if board[y][x]!="__" and board[y][x][1]!=self.color:
                 moverange.append((y,x))
                 break
             elif board[y][x][1]==self.color:
                 break
             else:
-                moverange.append((y,x))         
-            x+=1
-            y+=-1
+                moverange.append((y,x))   
+        x = self.x
+        y = self.y       
         #x- y-
         while x-1>-1 and y-1>-1:
-            x = x+1
-            y =y+1
+            x = x-1
+            y =y-1
             if board[y][x]!="__" and board[y][x][1]!=self.color:
                 moverange.append((y,x))
                 break
@@ -181,9 +189,54 @@ class Bishop(Piece):
                 break
             else:
                 moverange.append((y,x))         
-            x+=1
-            y+=-1
-        
+        return moverange
+class Queen(Piece):
+    def __init__(self, color, piece,y,x):
+        super().__init__(color, piece,y,x) 
+    def getmoverange(self):
+        moverange = []
+        x = self.x
+        y = self.y
+        moverange = Bishop(self.color,"B",y,x).getmoverange()+Rook(self.color,"R",y,x).getmoverange()
+        return moverange
+class King(Piece):
+    def __init__(self, color, piece,y,x):
+        super().__init__(color, piece,y,x) 
+    def getmoverange(self):
+        moverange = []
+        x = self.x
+        y = self.y
+        possiblemoves = []
+        if x-1>-1:
+            possiblemoves.append((y,x-1))
+            if y-1>-1:
+                possiblemoves.append((y-1,x-1))
+            if y+1<8:
+                possiblemoves.append((y+1,x-1))
+        if y-1>-1:
+            possiblemoves.append((y-1,x))
+        if x+1<8:
+            possiblemoves.append((y,x+1))
+            if y-1>-1:
+                possiblemoves.append((y-1,x+1))
+            if y+1<8:
+                possiblemoves.append((y+1,x+1))
+        if y+1<8:
+            possiblemoves.append((y+1,x))
+        for k in possiblemoves:
+            moverange.append(k)
+        for ligne in internalboard:
+                for p in ligne:
+                    if p != "__" and p.color != self.color and p.p != "p":
+                        for k in moverange:
+                            if k in p.getmoverange():
+                                moverange.remove(k)
+                    elif p != "__" and p.color != self.color and p.p =="p":
+                        for k in moverange:
+                            if k in p.geteatrange():
+                                print(k)
+                                moverange.remove(k)
+        print(moverange)
         return moverange
 #setup vars---------------------------------------------------------
 internalboard =  [ ["__" for i in range(8)] for _ in range(8) ]
@@ -213,11 +266,21 @@ def show(b):
 for i in range(len(board[0])):
     listplace(1,i,Pawn("w","p",1,i))
     listplace(6,i,Pawn("b","p",6,i))
-listplace(0,0,Rook("w","r",0,0))
-listplace(0,7,Rook("w","r",0,7))
-listplace(7,0,Rook("b","r",7,0))
-listplace(7,7,Rook("b","r",7,7))
-listplace(4,4,Knight("b","k",4,4))
+listplace(0,0,Rook("w","R",0,0))
+listplace(0,7,Rook("w","R",0,7))
+listplace(7,0,Rook("b","R",7,0))
+listplace(7,7,Rook("b","R",7,7))
+listplace(0,1,Knight("w","N",0,1))
+listplace(0,6,Knight("w","N",0,6))
+listplace(7,6,Knight("b","N",7,6))
+listplace(7,1,Knight("b","N",7,1))
+listplace(0,2,Bishop("w","B",0,2))
+listplace(0,5,Bishop("w","B",0,5))
+listplace(7,2,Bishop("b","B",7,2))
+listplace(7,5,Bishop("b","B",7,5))
+listplace(0,4,Queen("w","Q",0,4))
+listplace(7,4,Queen("b","Q",7,4))
+listplace(4,4,King("b","K",4,4))
 #-----------------------------------------------------------------
 while True:
     
