@@ -4,7 +4,7 @@ import chessmod
 dir_path = os.path.dirname(os.path.realpath(__file__))
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=64, color1="white", color2="blue"):
-        '''size is the size of a square, in pixels'''
+        #on initialise un échequier fille de tk.frame"
         self.rows = rows
         self.columns = columns
         self.size = size
@@ -20,24 +20,23 @@ class GameBoard(tk.Frame):
                                 width=canvas_width, height=canvas_height, background="bisque")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
-        # this binding will cause a refresh if the user interactively
-        # changes the window size
+        # ici on regle le raffraichissement de la fenetre a chaque fois qu'on la change de taille
         self.canvas.bind("<Configure>", self.refresh)
 
     def addpiece(self, name, image, row=0, column=0):
-        '''Add a piece to the playing board'''
+        #on ajoute une pièce dans la mémoire, on essaye de la placer
         self.canvas.create_image(0,0, image=image, tags=(name, "piece"), anchor="c")
         self.placepiece(name, row, column)
 
     def placepiece(self, name, row, column):
-        '''Place a piece at the given row/column'''
+        #on place la pièce sur l'échequier
         self.pieces[name] = (row, column)
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
         self.canvas.coords(name, x0, y0)
 
     def refresh(self, event):
-        '''Redraw the board, possibly in response to window being resized'''
+        #on redessine le board, fonction aussi appelé lors de la première création
         xsize = int((event.width-1) / self.columns)
         ysize = int((event.height-1) / self.rows)
         self.size = min(xsize, ysize)
@@ -58,10 +57,10 @@ class GameBoard(tk.Frame):
         self.canvas.tag_lower("square")
         
 
-if __name__ == "__main__":
+if __name__ == "__main__":#notre boucle principale, dans un "if __name__ == "__main__":" pour éviter des erreurs avec les classes 
     root = tk.Tk()
     board=GameBoard(root)
-    def boardplace():
+    def boardplace():#on place toutes les pièces sur l'échequier 
         x = 1 # je ne sait pas pourquoi mais si je commence sur x = 0 tout plante
         for i in range(8):
             for j in range(8):
@@ -101,7 +100,7 @@ if __name__ == "__main__":
                 elif chessmod.getboard()[i][j] == "Rw":
                     board.addpiece(str(x), wr, i,j)
                     x+=1
-    def get(event):
+    def get(event):# sur chaque nouvelle instruction, on refresh le board en le détruisant puis reconstruisant 
         global board
         board.destroy()
         board = GameBoard(root)
@@ -110,11 +109,11 @@ if __name__ == "__main__":
         boardplace()
         if chessmod.kingisdead() == True:
             a.config(text="GAME OVER")
-    def restart():
+    def restart():# on remet le board en position initialle 
         global board
         board.destroy()
         board = GameBoard(root)
-        chessmod.setuppieces()
+        chessmod.setuppieces()# on reset notre script d'échecs aussi
         board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
         boardplace()
         
@@ -124,7 +123,7 @@ if __name__ == "__main__":
     e.pack()
     
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    bb = tk.PhotoImage(file='assets\Bb.png')
+    bb = tk.PhotoImage(file='assets\Bb.png')#toutes les images utilisées
     bh = tk.PhotoImage(file='assets\Bh.png')
     bk = tk.PhotoImage(file='assets\Bk.png')
     bp = tk.PhotoImage(file='assets\Bp.png')
