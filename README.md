@@ -109,6 +109,10 @@ l'échequier est formé de cette façon:
 
 ### Exemples de code
 
+![Capture](https://user-images.githubusercontent.com/42862794/140824384-08af865e-4207-41b0-be10-0aa451ee754f.PNG)
+
+
+
 Ce mini projet à été construit avec python, ainsi que l'extension tkinter
 
 nous allons ici analyser en plus de détails certaines parties du code 
@@ -158,7 +162,17 @@ Le reste du code est annoté et (presque lisible).
 
 ### Difficultées
 
-les plus grandes difficultées dans la création de ce projet étaient la création de tout les mouvements des différentes pièces, nottament les pions, mais, le travail devenait plus simple au fur et a mesur, car on peut réutiliser des fonctions et mouvements (tel que la reine qui a les memes mouvements que les fous et les tours combinées).
+les plus grandes difficultées dans la création de ce projet étaient la création de tout les mouvements des différentes pièces, nottament les pions, mais, le travail devenait plus simple au fur et a mesur, car on peut réutiliser des fonctions et mouvements 
+
+
+(tel que la reine qui a les memes mouvements que les fous et les tours combinées
+
+```python
+moverange = Bishop(self.color,"B",y,x).getmoverange()+Rook(self.color,"R",y,x).getmoverange()
+```
+
+
+).
 
 Les pions étaient particulièrement durs car ils nécéssitent une fonction spéciale qui associe leur mouvment sur certaines cases a si un enemi est présent dessus:
 
@@ -209,3 +223,8 @@ def get(event):
             a.config(text="GAME OVER")
 ```
 a chaque fois que l'on entre une nouvelle commande, l'échequier supprime l'ancien échequier et en remet un nouveau avec les nouvelles positions des pièces. Notons aussi que l'échequier peut etre aggrandi ou rendu plus petit en ajustant la taille de la fenetre sans "casser" le positionnement des pièces.
+
+
+### Conclusion
+
+ce projet fut très intéressant a effectuer, j'ai appris beaucoup sur l'organisation nécéssaire pour tout les grands projets, surtout lorsque l'on "nage dans le code". Ce fut frustrant et décourageant par moments mais je suis heureux d'y etre parvenu et d'avoir surmonté les difficultés, surtout pour Tkinter, module dont je ne suis pas 100% familier. J'essayerai d'améliorer ce projet dans mon propre temps libre.
