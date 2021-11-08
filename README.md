@@ -53,6 +53,7 @@ les conditions de victoires,
 la GUI 
 ainsi qu'une façon de recommencer le jeu
 
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -104,6 +105,10 @@ l'échequier est formé de cette façon:
  toutes les pièces ont été testées et fonctionnent parfaitement.
  
  notons que pour effectuer un mat il faut manger le roi adverse.
+ 
+ ## Important 
+ ### PROBLEME POTENTIEL: sur les ordinateur testés, les assets sont au bon endroit pour etre trouvable par le code. je reccomende d'ouvrir le dossier initial "chess" dans visuial studio code puis lancer le code afin de contourner ce problème, si ceci persiste, il faut modifier les valeurs aux lignes 126-137 de tkinterchess pour mettre le path pris en compte par votre ordinateur 
+ 
  
 <p align="right">(<a href="#top">back to top</a>)</p>
 
