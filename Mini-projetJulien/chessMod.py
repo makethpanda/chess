@@ -251,7 +251,16 @@ board = [ ["__" for i in range(8)] for _ in range(8) ]
 length = ["a","b","c","d","e","f","g","h"]
 height = ["1","2","3","4","5","6","7","8"]
 tiles = [[length[i]+height[j]for i in range(8)] for j in range(8)]
-
+def kingisdead():
+    global board
+    x = 0
+    for i in board:
+        for j in i:
+            if j == "Kb" or  j =="Kw":
+                x += 1
+    if x ==2:
+        return False
+    else: return True
 def listplace(y,x,item):
     internalboard[y][x]=item
     if item != "__":
@@ -271,12 +280,17 @@ def show(b):
         print(i)
 def getboard():
     return board
-for i in range(len(board[0])):
-    listplace(1,i,Pawn("w","p",1,i))
-    listplace(6,i,Pawn("b","p",6,i))
+
 def setuppieces():
+    global internalboard
+    global board
+    global turn
+    turn = 0
     internalboard =  [ ["__" for i in range(8)] for _ in range(8) ]
     board = [ ["__" for i in range(8)] for _ in range(8) ]
+    for i in range(len(board[0])):
+        listplace(1,i,Pawn("w","p",1,i))
+        listplace(6,i,Pawn("b","p",6,i))
     listplace(0,0,Rook("w","R",0,0))
     listplace(0,7,Rook("w","R",0,7))
     listplace(7,0,Rook("b","R",7,0))
@@ -293,6 +307,7 @@ def setuppieces():
     listplace(7,4,Queen("b","Q",7,4))
     listplace(7,3,King("b","K",7,3))
     listplace(0,3,King("w","K",0,3))
+    show(board)
 setuppieces()
 #-----------------------------------------------------------------
 turn = 0
@@ -305,10 +320,13 @@ def play(newmove):
     x = newmove
     indexofthing = (length.index(x[0]),height.index(x[1]))
     indexofmove = (length.index(x[2]),height.index(x[3]))
-    if internalboard[indexofthing[1]][indexofthing[0]].showcolor()  == colorturn:
+    if internalboard[indexofthing[1]][indexofthing[0]] != "__" and internalboard[indexofthing[1]][indexofthing[0]].showcolor()  == colorturn:
         mover = internalboard[indexofthing[1]][indexofthing[0]]
         mover.move(indexofmove[0],indexofmove[1],mover.getmoverange())
         show(board)
         turn += 1
+        print(kingisdead())
     else:
         None
+
+#combinaison mat rapide: c2c3 d7d6 b2b4 e8a4 h2h3 a4d1

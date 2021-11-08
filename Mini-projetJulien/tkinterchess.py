@@ -59,22 +59,8 @@ class GameBoard(tk.Frame):
         
 
 if __name__ == "__main__":
-    x = 0
     root = tk.Tk()
     board=GameBoard(root)
-    board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    bb = tk.PhotoImage(file='assets\Bb.png')
-    bh = tk.PhotoImage(file='assets\Bh.png')
-    bk = tk.PhotoImage(file='assets\Bk.png')
-    bp = tk.PhotoImage(file='assets\Bp.png')
-    bq = tk.PhotoImage(file='assets\Bq.png')
-    br = tk.PhotoImage(file='assets\Br.png')
-    wb = tk.PhotoImage(file='assets\Wb.png')
-    wh = tk.PhotoImage(file='assets\Wh.png')
-    wk = tk.PhotoImage(file='assets\Wk.png')
-    wp = tk.PhotoImage(file='assets\Wp.png')
-    wq = tk.PhotoImage(file='assets\Wq.png')
-    wr = tk.PhotoImage(file='assets\Wr.png')
     def boardplace():
         x = 1 # je ne sait pas pourquoi mais si je commence sur x = 0 tout plante
         for i in range(8):
@@ -115,7 +101,6 @@ if __name__ == "__main__":
                 elif chessmod.getboard()[i][j] == "Rw":
                     board.addpiece(str(x), wr, i,j)
                     x+=1
-    boardplace()
     def get(event):
         global board
         board.destroy()
@@ -123,9 +108,37 @@ if __name__ == "__main__":
         board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
         chessmod.play(event.widget.get())
         boardplace()
-    root.title("chess")
+        if chessmod.kingisdead() == True:
+            a.config(text="GAME OVER")
+    def restart():
+        global board
+        board.destroy()
+        board = GameBoard(root)
+        chessmod.setuppieces()
+        board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+        boardplace()
+        
+
     e = tk.Entry(root, width=25)
     e.bind('<Return>', get)
     e.pack()
-
+    
+    board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+    bb = tk.PhotoImage(file='assets\Bb.png')
+    bh = tk.PhotoImage(file='assets\Bh.png')
+    bk = tk.PhotoImage(file='assets\Bk.png')
+    bp = tk.PhotoImage(file='assets\Bp.png')
+    bq = tk.PhotoImage(file='assets\Bq.png')
+    br = tk.PhotoImage(file='assets\Br.png')
+    wb = tk.PhotoImage(file='assets\Wb.png')
+    wh = tk.PhotoImage(file='assets\Wh.png')
+    wk = tk.PhotoImage(file='assets\Wk.png')
+    wp = tk.PhotoImage(file='assets\Wp.png')
+    wq = tk.PhotoImage(file='assets\Wq.png')
+    wr = tk.PhotoImage(file='assets\Wr.png')
+    boardplace()
+    root.title("chess")
+    a = tk.Label(root, text="game in progress")
+    tk.Button(root, text="restart game", command=restart).pack()
+    a.pack()
     root.mainloop()
