@@ -1,63 +1,88 @@
-"""#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from tkinter import *
-from random import *
-import time
-fen = Tk()
-can=Canvas(fen,width=500,height=500,background='white')
-can.pack()
-balle=can.create_oval(10,250,30,270,fill="red")
-randx = randint(-10,10)
-randy = randint(-10,10)
-x=20
-y=260
-while True:
-    if (x<5 or x>495):
-        randx=-randx
-    if (y<5 or y>495):
-        randy=-randy
-    can.move(balle,randx,randy)
-    x=x+randx
-    y=y+randy
-    fen.update_idletasks()
-    fen.update()
-    time.sleep(0.01)
+import tkinter as tk
+import os 
+import chessmod
+dir_path = os.path.dirname(os.path.realpath(__file__))
+class GameBoard(tk.Frame):
+    def __init__(self, parent, rows=8, columns=8, size=64, color1="white", color2="blue"):
+        '''size is the size of a square, in pixels'''
+        self.rows = rows
+        self.columns = columns
+        self.size = size
+        self.color1 = color1
+        self.color2 = color2
+        self.pieces = {}
+    
+        canvas_width = columns * size
+        canvas_height = rows * size + 100
 
-fen.mainloop()"""
+        tk.Frame.__init__(self, parent)
+        self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
+                                width=canvas_width, height=canvas_height, background="bisque")
+        self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
+        # this binding will cause a refresh if the user interactively
+        # changes the window size
+        self.canvas.bind("<Configure>", self.refresh)
 
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from tkinter import *
-import time
-import random
-fen = Tk()
-canvas=Canvas(fen,width=500,height=500,background='white')
-canvas.pack()
-class Balle:
-    def __init__(self,posX_ini,posY_ini,vitX_ini,vitY_ini,ray):
-        self.objet=canvas.create_oval(posX_ini-ray,posY_ini-ray,posX_ini+ray,posY_ini+ray,fill="red")
-        self.posX=posX_ini
-        self.posY=posY_ini
-        self.vitX=vitX_ini
-        self.vitY=vitY_ini
-    def deplacement(self):
-        if (self.posX<5 or self.posX>495):
-            self.vitX=-self.vitX
-        if (self.posY<5 or self.posY>495):
-            self.vitY=-self.vitY
-        canvas.move(self.objet,self.vitX,self.vitY)
-        self.posX=self.posX+self.vitX
-        self.posY=self.posY+self.vitY
-x=[]
-for i in range(50):
-    balle = Balle(250,250,random.randint(-50,50),random.randint(-50,50),5)
-    x.append(balle)
-print(x)
-while True:
-    for i in x:
-        i.deplacement()
-    fen.update_idletasks()
-    fen.update()
-    time.sleep(0.01)
-fen.mainloop()
+    def addpiece(self, name, image, row=0, column=0):
+        '''Add a piece to the playing board'''
+        self.canvas.create_image(0,0, image=image, tags=(name, "piece"), anchor="c")
+        self.placepiece(name, row, column)
+
+    def placepiece(self, name, row, column):
+        '''Place a piece at the given row/column'''
+        self.pieces[name] = (row, column)
+        x0 = (column * self.size) + int(self.size/2)
+        y0 = (row * self.size) + int(self.size/2)
+        self.canvas.coords(name, x0, y0)
+
+    def refresh(self, event):
+        '''Redraw the board, possibly in response to window being resized'''
+        xsize = int((event.width-1) / self.columns)
+        ysize = int((event.height-1) / self.rows)
+        self.size = min(xsize, ysize)
+        self.canvas.delete("square")
+        color = self.color2
+        for row in range(self.rows):
+            color = self.color1 if color == self.color2 else self.color2
+            for col in range(self.columns):
+                x1 = (col * self.size)
+                y1 = (row * self.size)
+                x2 = x1 + self.size
+                y2 = y1 + self.size
+                self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
+                color = self.color1 if color == self.color2 else self.color2
+        for name in self.pieces:
+            self.placepiece(name, self.pieces[name][0], self.pieces[name][1])
+        self.canvas.tag_raise("piece")
+        self.canvas.tag_lower("square")
+        
+
+if __name__ == "__main__":
+    x = 0
+    root = tk.Tk()
+    board = GameBoard(root)
+    board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+    bb = tk.PhotoImage(file='assets\Bb.png')
+    def boardplace():
+        x = 0
+        for i in range(8):
+            for j in range(8):
+                if chessmod.getboard()[i][j] != "__":
+                    board.addpiece(str(x), bb, i,j)
+                    x+=1
+
+    boardplace()
+    def get(event):
+        global board
+        board.destroy()
+        board = GameBoard(root)
+        board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+        chessmod.play(event.widget.get())
+        boardplace()
+    root.title("chess")
+    e = tk.Entry(root, width=25)
+    e.bind('<Return>', get)
+    e.pack()
+
+    root.mainloop()

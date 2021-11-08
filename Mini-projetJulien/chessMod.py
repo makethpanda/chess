@@ -97,7 +97,7 @@ class Pawn(Piece):
             if not isempty(board,self.y+self.advancement,self.x-1):
                 if self.color != checkboard(board,self.y+self.advancement,self.x-1):
                     moverange.append((self.y+self.advancement,self.x-1))
-            return moverange
+        return moverange
     def geteatrange(self):
         eatrange = []
         if self.x<7:
@@ -251,8 +251,7 @@ board = [ ["__" for i in range(8)] for _ in range(8) ]
 length = ["a","b","c","d","e","f","g","h"]
 height = ["1","2","3","4","5","6","7","8"]
 tiles = [[length[i]+height[j]for i in range(8)] for j in range(8)]
-movement = -1
-posb = 5
+
 def listplace(y,x,item):
     internalboard[y][x]=item
     if item != "__":
@@ -275,23 +274,26 @@ def getboard():
 for i in range(len(board[0])):
     listplace(1,i,Pawn("w","p",1,i))
     listplace(6,i,Pawn("b","p",6,i))
-listplace(0,0,Rook("w","R",0,0))
-listplace(0,7,Rook("w","R",0,7))
-listplace(7,0,Rook("b","R",7,0))
-listplace(7,7,Rook("b","R",7,7))
-listplace(0,1,Knight("w","N",0,1))
-listplace(0,6,Knight("w","N",0,6))
-listplace(7,6,Knight("b","N",7,6))
-listplace(7,1,Knight("b","N",7,1))
-listplace(0,2,Bishop("w","B",0,2))
-listplace(0,5,Bishop("w","B",0,5))
-listplace(7,2,Bishop("b","B",7,2))
-listplace(7,5,Bishop("b","B",7,5))
-listplace(0,4,Queen("w","Q",0,4))
-listplace(7,4,Queen("b","Q",7,4))
-listplace(7,3,King("b","K",7,3))
-listplace(0,3,King("w","K",0,3))
-
+def setuppieces():
+    internalboard =  [ ["__" for i in range(8)] for _ in range(8) ]
+    board = [ ["__" for i in range(8)] for _ in range(8) ]
+    listplace(0,0,Rook("w","R",0,0))
+    listplace(0,7,Rook("w","R",0,7))
+    listplace(7,0,Rook("b","R",7,0))
+    listplace(7,7,Rook("b","R",7,7))
+    listplace(0,1,Knight("w","N",0,1))
+    listplace(0,6,Knight("w","N",0,6))
+    listplace(7,6,Knight("b","N",7,6))
+    listplace(7,1,Knight("b","N",7,1))
+    listplace(0,2,Bishop("w","B",0,2))
+    listplace(0,5,Bishop("w","B",0,5))
+    listplace(7,2,Bishop("b","B",7,2))
+    listplace(7,5,Bishop("b","B",7,5))
+    listplace(0,4,Queen("w","Q",0,4))
+    listplace(7,4,Queen("b","Q",7,4))
+    listplace(7,3,King("b","K",7,3))
+    listplace(0,3,King("w","K",0,3))
+setuppieces()
 #-----------------------------------------------------------------
 turn = 0
 def play(newmove):
