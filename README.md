@@ -225,6 +225,6 @@ def get(event):
 a chaque fois que l'on entre une nouvelle commande, l'échequier supprime l'ancien échequier et en remet un nouveau avec les nouvelles positions des pièces. Notons aussi que l'échequier peut etre aggrandi ou rendu plus petit en ajustant la taille de la fenetre sans "casser" le positionnement des pièces.
 
 
-###Conclusion
+### Conclusion
 
 ce projet fut très intéressant a travailler, j'ai appris beaucoup sur l'organisation nécéssaier pour tout les grands projets, surtout lorsque l'on "nage dans le code". Ce fut frustrant et décourageant par moments mais je suis heureux d'y avoir parvenu.
