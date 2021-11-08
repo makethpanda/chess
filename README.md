@@ -227,4 +227,4 @@ a chaque fois que l'on entre une nouvelle commande, l'échequier supprime l'anci
 
 ### Conclusion
 
-ce projet fut très intéressant a travailler, j'ai appris beaucoup sur l'organisation nécéssaier pour tout les grands projets, surtout lorsque l'on "nage dans le code". Ce fut frustrant et décourageant par moments mais je suis heureux d'y avoir parvenu.
+ce projet fut très intéressant a effectuer, j'ai appris beaucoup sur l'organisation nécéssaire pour tout les grands projets, surtout lorsque l'on "nage dans le code". Ce fut frustrant et décourageant par moments mais je suis heureux d'y etre parvenu et d'avoir surmonté les difficultés, surtout pour Tkinter, module dont je ne suis pas 100% familier. J'essayerai d'améliorer ce projet dans mon propre temps libre.
